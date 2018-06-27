@@ -1,6 +1,7 @@
 body {
     background-color: #E2721C;
     color: #FFFFFF;
+    transition: 1s;
 }
 
 .button {
@@ -21,19 +22,9 @@ body {
 
 #toggleWorkBreak {
     position: absolute;
-    right: 10%;
+    right: 20%;
     bottom: 10%;
     transform: translate(100%, 100%);
-}
-
-#toggleWorkBreakButton {
-    background-color: transparent;
-    border: none;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 1.5em;
-    outline: none;
 }
 
 #timerButtons {
@@ -52,7 +43,7 @@ body {
     vertical-align: middle;*/
 }
 
-#timerText {
+#time {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 5em;
 }

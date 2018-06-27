@@ -1,45 +1,28 @@
-function toggleWorkBreak() {
-    if (document.getElementById("toggleWorkBreakButton").innerHTML === "Break") {
-        document.getElementById("toggleWorkBreakButton").innerHTML = "Work";
-        // disableButtons = true;
-        // workMode = true;
-    } else {
-        document.getElementById("toggleWorkBreakButton").innerHTML = "Break";
-        // workMode = false;
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    var workMode = true;
+    var disabledButtons = false;
 
-    // toggleBackgroundColour();
-}
+    const workBreakButton = document.querySelector('#toggleWorkBreakButton');
+    workBreakButton.addEventListener('click', toggleWorkBreak);
+    document.body.addEventListener('transitionend', enableButtons);
 
-function toggleBackgroundColour() {
-    // change colour
-    // disableButtons = false;
-}
-
-function startTimer() {
-
-}
-
-function start() {
-    var duration = 60;
-
-    if (true) {
-        duration *= 25;
-    } else {
-        if (true) {
-            duration *= 5;
+    function toggleWorkBreak() {
+        if (disabledButtons) {
+            return;
+        }
+        disabledButtons = true;
+        if (workMode) {
+            workBreakButton.innerHTML = 'break';
+            document.body.style.backgroundColor = '#FF72EE';
+            workMode = false;
         } else {
-            duration *= 15;
+            workBreakButton.innerHTML = 'work';
+            document.body.style.backgroundColor = '#E2721C';
+            workMode = true;
         }
     }
 
-    // startTimer();
-}
-
-function pause() {
-    timer.pause();
-}
-
-function reset() {
-    timer.reset();
-}
+    function enableButtons() {
+        disabledButtons = false;
+    }
+});
