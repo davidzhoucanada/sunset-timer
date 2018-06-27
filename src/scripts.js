@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         disabledButtons = true;
         if (workMode) {
-            workBreakButton.innerHTML = 'break';
-            document.body.style.backgroundColor = '#FF72EE';
+            workBreakButton.innerHTML = 'work';
+            document.body.style.backgroundColor = '#E2346B';
             workMode = false;
         } else {
-            workBreakButton.innerHTML = 'work';
-            document.body.style.backgroundColor = '#E2721C';
+            workBreakButton.innerHTML = 'break';
+            document.body.style.backgroundColor = '#E2571C';
             workMode = true;
         }
     }
