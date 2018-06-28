@@ -4,27 +4,24 @@ document.addEventListener('DOMContentLoaded', function () {
         "break5": 5,
         "break15": 15
     });
-    var workMode = true;
+    var mode = timeEnum.work;
     var disabledButtons = false;
 
     const buttons = document.querySelectorAll('button');
     const workBreakButton = document.querySelector('#toggleWorkBreakButton');
-    const startButton = document.querySelector('#start');
-    const stopButton = document.querySelector('#stop');
-    const resetButton = document.querySelector('#reset');
     const time = document.querySelector('#time');
 
-    startButton.addEventListener('click', startTimer);
-    stopButton.addEventListener('click', stopTimer);
-    resetButton.addEventListener('click', resetTimer);
+    document.querySelector('#start').addEventListener('click', startTimer);
+    document.querySelector('#stop').addEventListener('click', stopTimer);
+    document.querySelector('#reset').addEventListener('click', resetTimer);
     workBreakButton.addEventListener('click', toggleWorkBreak);
     buttons.forEach(button => {
         button.addEventListener('click', beginTransitionButton);
         button.addEventListener('transitionend', endTransitionButton);
     });
-    document.body.addEventListener('transitionend', endTransition);
-
-    var start = Date.now();
+    document.body.addEventListener('transitionend', endTransitionBackgroundColour);
+    
+    var start;
     setInterval(function () {
         var delta = Date.now() - start; // milliseconds elapsed since start
         //console.log(Math.round(delta / 1000)); // in seconds
@@ -33,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 1000); // update about every second
 
     function startTimer() {
-
+        start = Date.now();
     }
 
     function stopTimer() {
@@ -41,7 +38,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function resetTimer() {
-        start = Date.now();
+        setTime(mode * 60);
+    }
+
+    function setTime(seconds) {
+        time.innerHTML = Math.floor(seconds / 60) + ':' +
+            (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60);
     }
 
     function toggleWorkBreak() {
@@ -49,14 +51,16 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         disabledButtons = true;
-        if (workMode) {
+        if (mode === timeEnum.work) {
             workBreakButton.innerHTML = 'work';
             document.body.style.backgroundColor = '#E2346B';
-            workMode = false;
+            mode = timeEnum.break5;
+            setTime(mode * 60);
         } else {
             workBreakButton.innerHTML = 'break';
             document.body.style.backgroundColor = '#E2571C';
-            workMode = true;
+            mode = timeEnum.work;
+            setTime(mode * 60);
         }
     }
 
@@ -71,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         this.classList.remove('clicked');
     }
 
-    function endTransition(e) {
+    function endTransitionBackgroundColour(e) {
         if (e.propertyName === 'background-color') {
             disabledButtons = false;
         }
