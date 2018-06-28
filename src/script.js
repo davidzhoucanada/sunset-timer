@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
         "break15": 15
     });
     var mode = timeEnum.work;
+    var timeLeftMs = mode * 60 * 1000;
+    var start;
+    var stopped = true;
     var disabledButtons = false;
 
     const buttons = document.querySelectorAll('button');
@@ -12,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const time = document.querySelector('#time');
 
     document.querySelector('#start').addEventListener('click', startTimer);
-    document.querySelector('#stop').addEventListener('click', stopTimer);
+    document.querySelector('#pause').addEventListener('click', pauseTimer);
     document.querySelector('#reset').addEventListener('click', resetTimer);
     workBreakButton.addEventListener('click', toggleWorkBreak);
     buttons.forEach(button => {
@@ -20,24 +23,32 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('transitionend', endTransitionButton);
     });
     document.body.addEventListener('transitionend', endTransitionBackgroundColour);
-    
-    var start;
-    setInterval(function () {
-        var delta = Date.now() - start; // milliseconds elapsed since start
-        //console.log(Math.round(delta / 1000)); // in seconds
-        // alternatively just show wall clock time:
-        //console.log(new Date().toUTCString());
-    }, 1000); // update about every second
 
     function startTimer() {
+        stopped = false;
         start = Date.now();
+        var timer = setInterval(function() {
+            console.log('tick');
+            if (stopped) {
+                clearInterval(timer);
+            }
+            var delta = Date.now() - start; // milliseconds elapsed since start
+            timeLeftMs -= delta;
+            setTime(Math.round(timeLeftMs / 1000));
+            console.log(delta); // in seconds
+            // alternatively just show wall clock time:
+            console.log(new Date().toUTCString());
+            start = Date.now();
+        }, 1000); // update about every second
     }
 
-    function stopTimer() {
-
+    function pauseTimer() {
+        stopped = true;
     }
 
     function resetTimer() {
+        stopped = true;
+        timeLeftMs = mode * 60 * 1000;
         setTime(mode * 60);
     }
 
