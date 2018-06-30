@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
         "break15": 15
     });
     var mode = timeEnum.work;
-    var timeLeftMs = mode * 60 * 1000;
+    var timeLeftS = mode * 60, leftoverMs = 0;
     var start;
-    var stopped = true;
-    var disabledButtons = false;
+    var stopped = true, disabledButtons = false;
+    var fullTimer;
 
     const buttons = document.querySelectorAll('button');
     const workBreakButton = document.querySelector('#toggleWorkBreakButton');
@@ -26,39 +26,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function startTimer() {
         stopped = false;
+        if (leftoverMs != 0) {
+            var partTimer = setInterval(function () {
+                console.log('fraction tick');
+                timeLeftS--;
+                setTime(timeLeftS);
+                leftoverMs = 0;
+                clearInterval(partTimer);
+                normalTick();
+            }, leftoverMs);
+        } else {
+            normalTick();
+        }
+    }
+
+    function normalTick() {
         start = Date.now();
-        var timer = setInterval(function() {
-            console.log('tick');
-            if (stopped) {
-                clearInterval(timer);
-            }
-            var delta = Date.now() - start; // milliseconds elapsed since start
-            timeLeftMs -= delta;
-            setTime(Math.round(timeLeftMs / 1000));
-            console.log(delta); // in seconds
-            // alternatively just show wall clock time:
-            console.log(new Date().toUTCString());
+        fullTimer = setInterval(function () {
+            //console.log('tick');
+            //var delta = Date.now() - start;
+            timeLeftS--;
+            //console.log(delta);
+            setTime(timeLeftS);
             start = Date.now();
-        }, 1000); // update about every second
+        }, 1000);
     }
 
     function pauseTimer() {
         stopped = true;
+        clearInterval(fullTimer);
+        leftoverMs = Date.now() - start;
+        //console.log('leftover ms: ' + leftoverMs);
     }
 
     function resetTimer() {
         stopped = true;
-        timeLeftMs = mode * 60 * 1000;
+        clearInterval(fullTimer);
+        timeLeftS = mode * 60;
+        leftoverMs = 0;
         setTime(mode * 60);
     }
 
     function setTime(seconds) {
+        //console.log('set time: ' + Math.floor(seconds / 60) + ':' +
+        //    (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60));
         time.innerHTML = Math.floor(seconds / 60) + ':' +
             (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60);
     }
 
     function toggleWorkBreak() {
-        if (disabledButtons) {
+        if (disabledButtons || !stopped) {
             return;
         }
         disabledButtons = true;
@@ -92,3 +109,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+
