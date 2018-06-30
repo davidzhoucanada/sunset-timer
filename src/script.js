@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         stopped = false;
         if (leftoverMs != 0) {
             var partTimer = setInterval(function () {
-                console.log('fraction tick');
                 timeLeftS--;
                 setTime(timeLeftS);
                 leftoverMs = 0;
@@ -43,10 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function normalTick() {
         start = Date.now();
         fullTimer = setInterval(function () {
-            //console.log('tick');
-            //var delta = Date.now() - start;
             timeLeftS--;
-            //console.log(delta);
             setTime(timeLeftS);
             start = Date.now();
         }, 1000);
@@ -55,8 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function pauseTimer() {
         stopped = true;
         clearInterval(fullTimer);
-        leftoverMs = Date.now() - start;
-        //console.log('leftover ms: ' + leftoverMs);
+        leftoverMs = Math.max(0, 1000 - (Date.now() - start));
     }
 
     function resetTimer() {
@@ -68,8 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function setTime(seconds) {
-        //console.log('set time: ' + Math.floor(seconds / 60) + ':' +
-        //    (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60));
         time.innerHTML = Math.floor(seconds / 60) + ':' +
             (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60);
     }
