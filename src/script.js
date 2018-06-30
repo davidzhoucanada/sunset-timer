@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     var mode = timeEnum.work;
     var timeLeftS = mode * 60, leftoverMs = 0;
-    var start;
+    var start = Date.now();
     var stopped = true, disabledButtons = false;
-    var fullTimer;
+    var fullTimer = null;
 
     const buttons = document.querySelectorAll('button');
     const workBreakButton = document.querySelector('#toggleWorkBreakButton');
@@ -25,8 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('transitionend', endTransitionBackgroundColour);
 
     function startTimer() {
+        if (!stopped) {
+            return;
+        }
         stopped = false;
-        if (leftoverMs != 0) {
+        if (leftoverMs !== 0) {
             var partTimer = setInterval(function () {
                 timeLeftS--;
                 setTime(timeLeftS);
@@ -50,16 +53,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function pauseTimer() {
         stopped = true;
-        clearInterval(fullTimer);
-        leftoverMs = Math.max(0, 1000 - (Date.now() - start));
+        if (fullTimer != null) {
+            clearInterval(fullTimer);
+            fullTimer = null;
+            leftoverMs = Math.max(0, 1000 - (Date.now() - start));
+        }
     }
 
     function resetTimer() {
         stopped = true;
-        clearInterval(fullTimer);
-        timeLeftS = mode * 60;
-        leftoverMs = 0;
-        setTime(mode * 60);
+        if (fullTimer != null) {
+            clearInterval(fullTimer);
+            fullTimer = null;
+            timeLeftS = mode * 60;
+            leftoverMs = 0;
+            setTime(mode * 60);
+        }
     }
 
     function setTime(seconds) {
