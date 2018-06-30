@@ -2,6 +2,7 @@ body {
     background-color: #E2571C;
     color: #FFFFFF;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    overflow: auto;
     transition: 2s;
     /* Standard */
     user-select: none;

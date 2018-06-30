@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function resetTimer() {
         stopped = true;
-        if (fullTimer != null) {
+        if (fullTimer != null || timeLeftS != mode * 60 || leftoverMs != 0) {
             clearInterval(fullTimer);
             fullTimer = null;
             timeLeftS = mode * 60;
