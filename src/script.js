@@ -7,17 +7,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var mode = timeEnum.work;
     var timeLeftS = mode * 60, leftoverMs = 0;
     var start = Date.now();
-    var stopped = true, disabledButtons = false;
-    var fullTimer = null;
+    var stopped = true, disabledTimeButtons = false;
+    var fullTimer = null, partTimer = null;
 
     const buttons = document.querySelectorAll('button');
-    const workBreakButton = document.querySelector('#toggleWorkBreakButton');
     const time = document.querySelector('#time');
 
     document.querySelector('#start').addEventListener('click', startTimer);
     document.querySelector('#pause').addEventListener('click', pauseTimer);
     document.querySelector('#reset').addEventListener('click', resetTimer);
-    workBreakButton.addEventListener('click', toggleWorkBreak);
+    document.querySelector('#work').addEventListener('click', work);
+    document.querySelector('#shortBreak').addEventListener('click', shortBreak);
+    document.querySelector('#longBreak').addEventListener('click', longBreak);
     buttons.forEach(button => {
         button.addEventListener('click', beginTransitionButton);
         button.addEventListener('transitionend', endTransitionButton);
@@ -30,11 +31,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         stopped = false;
         if (leftoverMs !== 0) {
-            var partTimer = setInterval(function () {
+            start = Date.now();
+            partTimer = setTimeout(function () {
                 timeLeftS--;
                 setTime(timeLeftS);
                 leftoverMs = 0;
-                clearInterval(partTimer);
+                partTimer = null;
                 normalTick();
             }, leftoverMs);
         } else {
@@ -53,18 +55,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function pauseTimer() {
         stopped = true;
-        if (fullTimer != null) {
+        if (fullTimer != null || partTimer != null) {
             clearInterval(fullTimer);
+            clearTimeout(partTimer);
+            if (partTimer !== null) {
+                leftoverMs -= Date.now() - start;
+            } else {
+                leftoverMs = Math.max(0, 1000 - (Date.now() - start));
+            }
             fullTimer = null;
-            leftoverMs = Math.max(0, 1000 - (Date.now() - start));
+            partTimer = null;
         }
     }
 
     function resetTimer() {
         stopped = true;
-        if (fullTimer != null || timeLeftS != mode * 60 || leftoverMs != 0) {
+        if (fullTimer != null || partTimer != null || timeLeftS != mode * 60 || leftoverMs != 0) {
             clearInterval(fullTimer);
+            clearTimeout(partTimer);
             fullTimer = null;
+            partTimer = null;
             timeLeftS = mode * 60;
             leftoverMs = 0;
             setTime(mode * 60);
@@ -76,28 +86,37 @@ document.addEventListener('DOMContentLoaded', function () {
             (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60);
     }
 
-    function toggleWorkBreak() {
-        if (disabledButtons || !stopped) {
+    function work() {
+        if (!stopped) {
             return;
         }
-        disabledButtons = true;
-        if (mode === timeEnum.work) {
-            workBreakButton.innerHTML = 'work';
-            document.body.style.backgroundColor = '#E2346B';
-            mode = timeEnum.break5;
-            setTime(mode * 60);
-        } else {
-            workBreakButton.innerHTML = 'break';
-            document.body.style.backgroundColor = '#E2571C';
-            mode = timeEnum.work;
-            setTime(mode * 60);
+        disabledTimeButtons = true;
+        document.body.style.backgroundColor = '#E2571C';
+        mode = timeEnum.work;
+        setTime(mode * 60);
+    }
+
+    function shortBreak() {
+        if (!stopped) {
+            return;
         }
+        disabledTimeButtons = true;
+        document.body.style.backgroundColor = '#F26592';
+        mode = timeEnum.break5;
+        setTime(mode * 60);
+    }
+
+    function longBreak() {
+        if (!stopped) {
+            return;
+        }
+        disabledTimeButtons = true;
+        document.body.style.backgroundColor = '#E2346B';
+        mode = timeEnum.break15;
+        setTime(mode * 60);
     }
 
     function beginTransitionButton() {
-        if (disabledButtons) {
-            return;
-        }
         this.classList.add('clicked');
     }
 
@@ -107,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function endTransitionBackgroundColour(e) {
         if (e.propertyName === 'background-color') {
-            disabledButtons = false;
+            disabledTimeButtons = false;
         }
     }
 });
