@@ -70,6 +70,22 @@ button:hover {
     transform: translate(50%, 50%);
 }
 
+#timer span {
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+}
+
+#timer span:first-of-type {
+    text-align: right
+}
+
 #time {
     font-size: 5em;
+}
+
+span {
+    display: inline-block;
+    margin-left: 0px;
+    margin-right: 0px;
 }

@@ -7,11 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var mode = timeEnum.work;
     var timeLeftS = mode * 60, leftoverMs = 0;
     var start = Date.now();
-    var stopped = true, disabledTimeButtons = false;
+    var stopped = true;
     var fullTimer = null, partTimer = null;
 
     const buttons = document.querySelectorAll('button');
-    const time = document.querySelector('#time');
+    const minutes = document.querySelector('#minutes');
+    const seconds = document.querySelector('#seconds');
 
     document.querySelector('#start').addEventListener('click', startTimer);
     document.querySelector('#pause').addEventListener('click', pauseTimer);
@@ -23,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', beginTransitionButton);
         button.addEventListener('transitionend', endTransitionButton);
     });
-    document.body.addEventListener('transitionend', endTransitionBackgroundColour);
 
     function startTimer() {
         if (!stopped) {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             clearInterval(fullTimer);
             clearTimeout(partTimer);
             if (partTimer !== null) {
-                leftoverMs -= Date.now() - start;
+                leftoverMs = Math.max(0, leftoverMs - (Date.now() - start));
             } else {
                 leftoverMs = Math.max(0, 1000 - (Date.now() - start));
             }
@@ -81,16 +81,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function setTime(seconds) {
-        time.innerHTML = Math.floor(seconds / 60) + ':' +
-            (seconds % 60 <= 9 ? '0' + seconds % 60 : seconds % 60);
+    function setTime(secondsLeft) {
+        minutes.innerHTML = Math.floor(secondsLeft / 60);
+        seconds.innerHTML = secondsLeft % 60 <= 9 ? '0' + secondsLeft % 60 : secondsLeft % 60;
     }
 
     function work() {
         if (!stopped) {
             return;
         }
-        disabledTimeButtons = true;
         document.body.style.backgroundColor = '#E2571C';
         mode = timeEnum.work;
         setTime(mode * 60);
@@ -100,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!stopped) {
             return;
         }
-        disabledTimeButtons = true;
         document.body.style.backgroundColor = '#F26592';
         mode = timeEnum.break5;
         setTime(mode * 60);
@@ -110,25 +108,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!stopped) {
             return;
         }
-        disabledTimeButtons = true;
         document.body.style.backgroundColor = '#E2346B';
         mode = timeEnum.break15;
         setTime(mode * 60);
     }
-
-    function beginTransitionButton() {
-        this.classList.add('clicked');
-    }
-
-    function endTransitionButton() {
-        this.classList.remove('clicked');
-    }
-
-    function endTransitionBackgroundColour(e) {
-        if (e.propertyName === 'background-color') {
-            disabledTimeButtons = false;
-        }
-    }
 });
 
+function beginTransitionButton() {
+    this.classList.add('clicked');
+}
 
+function endTransitionButton() {
+    this.classList.remove('clicked');
+}
