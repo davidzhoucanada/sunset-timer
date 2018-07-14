@@ -4,7 +4,6 @@
 <head>
     <meta charset='UTF-8'>
     <title>Sunset Timer</title>
-    <script src='script.js'></script>
     <link rel='stylesheet' href='style.css'>
     <link rel="icon" type="image/png" href="../favicon.png">
 </head>
@@ -18,15 +17,19 @@
         <button id='pause'>pause</button>
         <button id='reset'>reset</button>
     </div>
-    <div id='work'>
-        <button class='modeButton' id='workButton'>work</button>
+    <div id='modeButtons'>
+        <div id='work'>
+            <button id='workButton'>work</button>
+        </div>
+        <div id='shortBreak'>
+            <button id='shortBreakButton'>short break</button>
+        </div>
+        <div id='longBreak'>
+            <button id='longBreakButton'>long break</button>
+        </div>
     </div>
-    <div id='shortBreak'>
-        <button class='modeButton' id='shortBreakButton'>short break</button>
-    </div>
-    <div id='longBreak'>
-        <button class='modeButton' id='longBreakButton'>long break</button>
-    </div>
+    
+    <script src='script.js'></script>
 </body>
 
 </html>

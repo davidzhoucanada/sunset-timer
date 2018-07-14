@@ -77,15 +77,19 @@ button:hover {
 }
 
 #timer span:first-of-type {
-    text-align: right
+    text-align: right;
 }
 
 #time {
     font-size: 5em;
 }
 
-span {
+#timer span {
     display: inline-block;
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+#modeButtons {
+    text-align: right;
 }
