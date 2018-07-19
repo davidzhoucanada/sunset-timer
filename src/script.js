@@ -54,7 +54,7 @@ function normalTick() {
 
 function pauseTimer() {
     stopped = true;
-    if (fullTimer != null || partTimer != null) {
+    if (fullTimer !== null || partTimer !== null) {
         clearInterval(fullTimer);
         clearTimeout(partTimer);
         if (partTimer !== null) {
@@ -69,7 +69,7 @@ function pauseTimer() {
 
 function resetTimer() {
     stopped = true;
-    if (fullTimer != null || partTimer != null || timeLeftS != mode * 60 || leftoverMs != 0) {
+    if (fullTimer !== null || partTimer !== null || timeLeftS !== mode * 60 || leftoverMs !== 0) {
         clearInterval(fullTimer);
         clearTimeout(partTimer);
         fullTimer = null;
@@ -82,7 +82,7 @@ function resetTimer() {
 
 function setTime(secondsLeft) {
     minutes.innerHTML = Math.floor(secondsLeft / 60);
-    seconds.innerHTML = secondsLeft % 60 <= 9 ? '0' + secondsLeft % 60 : secondsLeft % 60;
+    seconds.innerHTML = secondsLeft % 60 <= 9 ? '0' + (secondsLeft % 60) : (secondsLeft % 60);
 }
 
 function work() {
