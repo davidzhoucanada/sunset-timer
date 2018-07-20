@@ -74,7 +74,7 @@ button {
     font-family: inherit;
     font-size: 1.5em;
     outline: none;
-    transition: all .15s ease;
+    transition: all 0.15s ease;
 }
 
 #timerButtons>button {

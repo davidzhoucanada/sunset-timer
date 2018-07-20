@@ -31,11 +31,15 @@ function startTimer() {
     stopped = false;
     if (leftoverMs !== 0) {
         start = Date.now();
+        // runs a partial second
         partTimer = setTimeout(function () {
             timeLeftS--;
             setTime(timeLeftS);
             leftoverMs = 0;
             partTimer = null;
+            if (timeLeftS === 0) {
+                timeOut();
+            }
             normalTick();
         }, leftoverMs);
     } else {
@@ -48,6 +52,9 @@ function normalTick() {
     fullTimer = setInterval(function () {
         timeLeftS--;
         setTime(timeLeftS);
+        if (timeLeftS === 0) {
+            timeOut();
+        }
         start = Date.now();
     }, 1000);
 }
@@ -58,8 +65,10 @@ function pauseTimer() {
         clearInterval(fullTimer);
         clearTimeout(partTimer);
         if (partTimer !== null) {
+            // calculates partial second of partial second (caused by unpausing and pausing again rapidly)
             leftoverMs = Math.max(0, leftoverMs - (Date.now() - start));
         } else {
+            // calculates partial second when paused
             leftoverMs = Math.max(0, 1000 - (Date.now() - start));
         }
         fullTimer = null;
@@ -85,12 +94,23 @@ function setTime(secondsLeft) {
     seconds.innerHTML = secondsLeft % 60 <= 9 ? '0' + (secondsLeft % 60) : (secondsLeft % 60);
 }
 
+function timeOut() {
+    clearInterval(fullTimer);
+    fullTimer = null;
+    leftoverMs = 0;
+    // gives time for setTime to run
+    setTimeout(function () {
+        alert('time up!');
+    }, 1);
+}
+
 function work() {
     if (!stopped) {
         return;
     }
     document.body.style.backgroundColor = '#E2571C';
     mode = timeEnum.work;
+    timeLeftS = mode * 60;
     setTime(mode * 60);
 }
 
@@ -100,6 +120,7 @@ function shortBreak() {
     }
     document.body.style.backgroundColor = '#F26592';
     mode = timeEnum.break5;
+    timeLeftS = mode * 60;
     setTime(mode * 60);
 }
 
@@ -109,6 +130,7 @@ function longBreak() {
     }
     document.body.style.backgroundColor = '#E2346B';
     mode = timeEnum.break15;
+    timeLeftS = mode * 60;
     setTime(mode * 60);
 }
 
@@ -119,3 +141,6 @@ function beginTransitionButton() {
 function endTransitionButton() {
     this.classList.remove('clicked');
 }
+
+// sets time in HTML upon page load
+setTime(mode * 60);
