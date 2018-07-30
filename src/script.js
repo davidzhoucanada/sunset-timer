@@ -108,7 +108,7 @@ function work() {
     if (!stopped) {
         return;
     }
-    document.body.style.backgroundColor = '#E2571C';
+    document.body.style.backgroundColor = '#FF7E30';
     mode = timeEnum.work;
     timeLeftS = mode * 60;
     setTime(mode * 60);
