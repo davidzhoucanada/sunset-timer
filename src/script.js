@@ -32,7 +32,7 @@ function startTimer() {
     if (leftoverMs !== 0) {
         start = Date.now();
         // runs a partial second
-        partTimer = setTimeout(function () {
+        partTimer = setTimeout(() => {
             timeLeftS--;
             setTime(timeLeftS);
             leftoverMs = 0;
@@ -49,7 +49,7 @@ function startTimer() {
 
 function normalTick() {
     start = Date.now();
-    fullTimer = setInterval(function () {
+    fullTimer = setInterval(() => {
         timeLeftS--;
         setTime(timeLeftS);
         if (timeLeftS === 0) {
@@ -90,8 +90,8 @@ function resetTimer() {
 }
 
 function setTime(secondsLeft) {
-    minutes.innerHTML = Math.floor(secondsLeft / 60);
-    seconds.innerHTML = secondsLeft % 60 <= 9 ? '0' + (secondsLeft % 60) : (secondsLeft % 60);
+    minutes.textContent = Math.floor(secondsLeft / 60);
+    seconds.textContent = secondsLeft % 60 <= 9 ? '0' + (secondsLeft % 60) : (secondsLeft % 60);
 }
 
 function timeOut() {
@@ -99,7 +99,7 @@ function timeOut() {
     fullTimer = null;
     leftoverMs = 0;
     // gives time for setTime to run
-    setTimeout(function () {
+    setTimeout(() => {
         alert('time up!');
     }, 1);
 }
