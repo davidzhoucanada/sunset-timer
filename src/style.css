@@ -54,13 +54,13 @@ body {
     margin: 0px;
 }
 
-#timerButtons {
+#timer-buttons {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-#modeButtons {
+#mode-buttons {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -77,12 +77,12 @@ button {
     transition: all 0.15s ease;
 }
 
-#timerButtons>button {
+#timer-buttons>button {
     margin-left: 1em;
     margin-right: 1em;
 }
 
-#modeButtons>button {
+#mode-buttons>button {
     margin-right: 0.8em;
 }
 

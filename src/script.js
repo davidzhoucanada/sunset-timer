@@ -17,8 +17,8 @@ document.querySelector('#start').addEventListener('click', startTimer);
 document.querySelector('#pause').addEventListener('click', pauseTimer);
 document.querySelector('#reset').addEventListener('click', resetTimer);
 document.querySelector('#work').addEventListener('click', work);
-document.querySelector('#shortBreak').addEventListener('click', shortBreak);
-document.querySelector('#longBreak').addEventListener('click', longBreak);
+document.querySelector('#short-break').addEventListener('click', shortBreak);
+document.querySelector('#long-break').addEventListener('click', longBreak);
 buttons.forEach(button => {
     button.addEventListener('click', beginTransitionButton);
     button.addEventListener('transitionend', endTransitionButton);
