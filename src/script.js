@@ -98,9 +98,11 @@ function timeOut() {
     clearInterval(fullTimer);
     fullTimer = null;
     leftoverMs = 0;
+    stopped = true;
     // gives time for setTime to run
     setTimeout(() => {
-        alert('time up!');
+        var audio = new Audio('../audio/shallow.mp3');
+        audio.play();
     }, 1);
 }
 
