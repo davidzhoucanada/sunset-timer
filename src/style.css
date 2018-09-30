@@ -82,6 +82,14 @@ button {
     margin-right: 1em;
 }
 
+#pause {
+    flex: 0 0 4.5em;
+}
+
+#reset {
+    flex: 0 0 4.5em;
+}
+
 #mode-buttons>button {
     margin-right: 0.8em;
 }
