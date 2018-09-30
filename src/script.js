@@ -109,8 +109,10 @@ function resetTimer() {
 }
 
 function setTime(secondsLeft) {
-    minutes.textContent = Math.floor(secondsLeft / 60);
-    seconds.textContent = secondsLeft % 60 <= 9 ? '0' + (secondsLeft % 60) : (secondsLeft % 60);
+    minutes.textContent = Math.floor(secondsLeft / 60) <= 9 ?
+        '0' + Math.floor(secondsLeft / 60) : Math.floor(secondsLeft / 60);
+    seconds.textContent = secondsLeft % 60 <= 9 ?
+        '0' + (secondsLeft % 60) : (secondsLeft % 60);
 }
 
 function setPauseButton(paused) {
