@@ -1,34 +1,44 @@
 var timeEnum = Object.freeze({
-    "work": 25,
-    "break5": 5,
-    "break15": 15
+    'work': 25,
+    'shortBreak': 5,
+    'longBreak': 15
 });
-var mode = timeEnum.work;
+var modeColourMap = new Map([
+    [timeEnum.work, '#FF7E30'],
+    [timeEnum.shortBreak, '#F26592'],
+    [timeEnum.longBreak, '#E2346B']
+]);
+var mode = timeEnum.work, paused = true;
 var timeLeftS = mode * 60, leftoverMs = 0;
 var start = Date.now();
-var stopped = true;
 var fullTimer = null, partTimer = null;
 
 const buttons = document.querySelectorAll('button');
 const minutes = document.querySelector('#minutes');
 const seconds = document.querySelector('#seconds');
+const pauseButton = document.querySelector('#pause');
 
-document.querySelector('#start').addEventListener('click', startTimer);
-document.querySelector('#pause').addEventListener('click', pauseTimer);
+document.querySelector('#pause').addEventListener('click', handlePause);
 document.querySelector('#reset').addEventListener('click', resetTimer);
-document.querySelector('#work').addEventListener('click', work);
-document.querySelector('#short-break').addEventListener('click', shortBreak);
-document.querySelector('#long-break').addEventListener('click', longBreak);
+document.querySelector('#work').addEventListener('click', () => {
+    mode = timeEnum.work;
+    setMode();
+});
+document.querySelector('#short-break').addEventListener('click', () => {
+    mode = timeEnum.shortBreak;
+    setMode();
+});
+document.querySelector('#long-break').addEventListener('click', () => {
+    mode = timeEnum.longBreak;
+    setMode();
+});
 buttons.forEach(button => {
     button.addEventListener('click', beginTransitionButton);
     button.addEventListener('transitionend', endTransitionButton);
 });
 
 function startTimer() {
-    if (!stopped) {
-        return;
-    }
-    stopped = false;
+    paused = false;
     if (leftoverMs !== 0) {
         start = Date.now();
         // runs a partial second
@@ -59,9 +69,16 @@ function normalTick() {
     }, 1000);
 }
 
-function pauseTimer() {
-    stopped = true;
+function handlePause() {
+    if (paused) {
+        startTimer();
+        setPauseButton(paused);
+        return;
+    }
+
     if (fullTimer !== null || partTimer !== null) {
+        paused = true;
+        setPauseButton(paused);
         clearInterval(fullTimer);
         clearTimeout(partTimer);
         if (partTimer !== null) {
@@ -77,15 +94,17 @@ function pauseTimer() {
 }
 
 function resetTimer() {
-    stopped = true;
     if (fullTimer !== null || partTimer !== null || timeLeftS !== mode * 60 || leftoverMs !== 0) {
         clearInterval(fullTimer);
         clearTimeout(partTimer);
         fullTimer = null;
         partTimer = null;
-        timeLeftS = mode * 60;
         leftoverMs = 0;
+        timeLeftS = mode * 60;
+        paused = false;
+        setPauseButton();
         setTime(mode * 60);
+        startTimer();
     }
 }
 
@@ -94,46 +113,24 @@ function setTime(secondsLeft) {
     seconds.textContent = secondsLeft % 60 <= 9 ? '0' + (secondsLeft % 60) : (secondsLeft % 60);
 }
 
+function setPauseButton(paused) {
+    pauseButton.textContent = paused ? 'unpause' : 'pause';
+}
+
+function setMode() {
+    document.body.style.backgroundColor = modeColourMap.get(mode);
+    resetTimer();
+}
+
 function timeOut() {
     clearInterval(fullTimer);
     fullTimer = null;
     leftoverMs = 0;
-    stopped = true;
     // gives time for setTime to run
     setTimeout(() => {
         var audio = new Audio('../audio/shallow.mp3');
         audio.play();
     }, 1);
-}
-
-function work() {
-    if (!stopped) {
-        return;
-    }
-    document.body.style.backgroundColor = '#FF7E30';
-    mode = timeEnum.work;
-    timeLeftS = mode * 60;
-    setTime(mode * 60);
-}
-
-function shortBreak() {
-    if (!stopped) {
-        return;
-    }
-    document.body.style.backgroundColor = '#F26592';
-    mode = timeEnum.break5;
-    timeLeftS = mode * 60;
-    setTime(mode * 60);
-}
-
-function longBreak() {
-    if (!stopped) {
-        return;
-    }
-    document.body.style.backgroundColor = '#E2346B';
-    mode = timeEnum.break15;
-    timeLeftS = mode * 60;
-    setTime(mode * 60);
 }
 
 function beginTransitionButton() {
@@ -146,3 +143,4 @@ function endTransitionButton() {
 
 // sets time in HTML upon page load
 setTime(mode * 60);
+startTimer();
