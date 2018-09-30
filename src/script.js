@@ -18,7 +18,7 @@ const minutes = document.querySelector('#minutes');
 const seconds = document.querySelector('#seconds');
 const pauseButton = document.querySelector('#pause');
 
-document.querySelector('#pause').addEventListener('click', handlePause);
+pauseButton.addEventListener('click', handlePause);
 document.querySelector('#reset').addEventListener('click', resetTimer);
 document.querySelector('#work').addEventListener('click', () => {
     mode = timeEnum.work;
@@ -79,8 +79,6 @@ function handlePause() {
     if (fullTimer !== null || partTimer !== null) {
         paused = true;
         setPauseButton(paused);
-        clearInterval(fullTimer);
-        clearTimeout(partTimer);
         if (partTimer !== null) {
             // calculates partial second of partial second (caused by unpausing and pausing again rapidly)
             leftoverMs = Math.max(0, leftoverMs - (Date.now() - start));
@@ -88,17 +86,13 @@ function handlePause() {
             // calculates partial second when paused
             leftoverMs = Math.max(0, 1000 - (Date.now() - start));
         }
-        fullTimer = null;
-        partTimer = null;
+        clearTimers();
     }
 }
 
 function resetTimer() {
     if (fullTimer !== null || partTimer !== null || timeLeftS !== mode * 60 || leftoverMs !== 0) {
-        clearInterval(fullTimer);
-        clearTimeout(partTimer);
-        fullTimer = null;
-        partTimer = null;
+        clearTimers();
         leftoverMs = 0;
         timeLeftS = mode * 60;
         paused = false;
@@ -106,6 +100,13 @@ function resetTimer() {
         setTime(mode * 60);
         startTimer();
     }
+}
+
+function clearTimers() {
+    clearInterval(fullTimer);
+    clearTimeout(partTimer);
+    fullTimer = null;
+    partTimer = null;
 }
 
 function setTime(secondsLeft) {
