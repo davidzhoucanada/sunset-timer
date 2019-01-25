@@ -42,36 +42,11 @@
         button.addEventListener('transitionend', endTransitionButton);
     });
 
-    function startTimer() {
-        paused = false;
-        if (leftoverMs !== 0) {
-            start = Date.now();
-            // runs a partial second
-            partTimer = setTimeout(() => {
-                timeLeftS--;
-                setTime(timeLeftS);
-                leftoverMs = 0;
-                partTimer = null;
-                if (timeLeftS === 0) {
-                    timeOut();
-                }
-                normalTick();
-            }, leftoverMs);
-        } else {
-            normalTick();
-        }
-    }
-
-    function normalTick() {
-        start = Date.now();
-        fullTimer = setInterval(() => {
-            timeLeftS--;
-            setTime(timeLeftS);
-            if (timeLeftS === 0) {
-                timeOut();
-            }
-            start = Date.now();
-        }, 1000);
+    function clearTimers() {
+        clearInterval(fullTimer);
+        clearTimeout(partTimer);
+        fullTimer = null;
+        partTimer = null;
     }
 
     function handlePause() {
@@ -95,6 +70,18 @@
         }
     }
 
+    function normalTick() {
+        start = Date.now();
+        fullTimer = setInterval(() => {
+            timeLeftS--;
+            setTime(timeLeftS);
+            if (timeLeftS === 0) {
+                timeOut();
+            }
+            start = Date.now();
+        }, 1000);
+    }
+
     function resetTimer() {
         if (fullTimer !== null || partTimer !== null || timeLeftS !== mode * 60 || leftoverMs !== 0) {
             clearTimers();
@@ -107,11 +94,13 @@
         }
     }
 
-    function clearTimers() {
-        clearInterval(fullTimer);
-        clearTimeout(partTimer);
-        fullTimer = null;
-        partTimer = null;
+    function setMode() {
+        document.body.style.backgroundColor = modeColourMap.get(mode);
+        resetTimer();
+    }
+
+    function setPauseButton(paused) {
+        pauseButton.textContent = paused ? 'unpause' : 'pause';
     }
 
     function setTime(secondsLeft) {
@@ -121,13 +110,24 @@
             '0' + (secondsLeft % 60) : (secondsLeft % 60);
     }
 
-    function setPauseButton(paused) {
-        pauseButton.textContent = paused ? 'unpause' : 'pause';
-    }
-
-    function setMode() {
-        document.body.style.backgroundColor = modeColourMap.get(mode);
-        resetTimer();
+    function startTimer() {
+        paused = false;
+        if (leftoverMs !== 0) {
+            start = Date.now();
+            // runs a partial second
+            partTimer = setTimeout(() => {
+                timeLeftS--;
+                setTime(timeLeftS);
+                leftoverMs = 0;
+                partTimer = null;
+                if (timeLeftS === 0) {
+                    timeOut();
+                }
+                normalTick();
+            }, leftoverMs);
+        } else {
+            normalTick();
+        }
     }
 
     function timeOut() {
