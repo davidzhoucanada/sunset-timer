@@ -18,18 +18,22 @@
     const minutes = document.querySelector('#minutes');
     const seconds = document.querySelector('#seconds');
     const pauseButton = document.querySelector('#pause');
+    const resetButton = document.querySelector('#reset');
+    const workButton = document.querySelector('#work');
+    const shortBreakButton = document.querySelector('#short-break');
+    const longBreakButton = document.querySelector('#long-break');
 
     pauseButton.addEventListener('click', handlePause);
-    document.querySelector('#reset').addEventListener('click', resetTimer);
-    document.querySelector('#work').addEventListener('click', () => {
+    resetButton.addEventListener('click', resetTimer);
+    workButton.addEventListener('click', () => {
         mode = timeEnum.work;
         setMode();
     });
-    document.querySelector('#short-break').addEventListener('click', () => {
+    shortBreakButton.addEventListener('click', () => {
         mode = timeEnum.shortBreak;
         setMode();
     });
-    document.querySelector('#long-break').addEventListener('click', () => {
+    longBreakButton.addEventListener('click', () => {
         mode = timeEnum.longBreak;
         setMode();
     });
