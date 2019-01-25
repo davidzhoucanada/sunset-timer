@@ -1,13 +1,13 @@
 (function () {
     var timeEnum = Object.freeze({
         'work': 25,
-        'shortBreak': 5,
-        'longBreak': 15
+        'short-break': 5,
+        'long-break': 15
     });
     var modeColourMap = new Map([
-        [timeEnum.work, '#FF7E30'],
-        [timeEnum.shortBreak, '#F26592'],
-        [timeEnum.longBreak, '#E2346B']
+        [timeEnum['work'], '#FF7E30'],
+        [timeEnum['short-break'], '#F26592'],
+        [timeEnum['long-break'], '#E2346B']
     ]);
     var mode = timeEnum.work, paused = true;
     var timeLeftS = mode * 60, leftoverMs = 0;
@@ -26,21 +26,25 @@
     pauseButton.addEventListener('click', handlePause);
     resetButton.addEventListener('click', resetTimer);
     workButton.addEventListener('click', () => {
-        mode = timeEnum.work;
+        mode = timeEnum['work'];
         setMode();
     });
     shortBreakButton.addEventListener('click', () => {
-        mode = timeEnum.shortBreak;
+        mode = timeEnum['short-break'];
         setMode();
     });
     longBreakButton.addEventListener('click', () => {
-        mode = timeEnum.longBreak;
+        mode = timeEnum['long-break'];
         setMode();
     });
     buttons.forEach(button => {
-        button.addEventListener('click', beginTransitionButton);
-        button.addEventListener('transitionend', endTransitionButton);
+        button.addEventListener('click', addClickedClassButton);
+        button.addEventListener('transitionend', removeClickedClassButton);
     });
+
+    function addClickedClassButton() {
+        this.classList.add('clicked');
+    }
 
     function clearTimers() {
         clearInterval(fullTimer);
@@ -80,6 +84,10 @@
             }
             start = Date.now();
         }, 1000);
+    }
+
+    function removeClickedClassButton() {
+        this.classList.remove('clicked');
     }
 
     function resetTimer() {
@@ -139,14 +147,6 @@
             var audio = new Audio('../audio/shallow.mp3');
             audio.play();
         }, 1);
-    }
-
-    function beginTransitionButton() {
-        this.classList.add('clicked');
-    }
-
-    function endTransitionButton() {
-        this.classList.remove('clicked');
     }
 
     // sets time in HTML upon page load
