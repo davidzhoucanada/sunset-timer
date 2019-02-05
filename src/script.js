@@ -1,5 +1,5 @@
 (function () {
-    var timeEnum = Object.freeze({
+    const timeEnum = Object.freeze({
         'work': 25,
         'short-break': 5,
         'long-break': 15
@@ -9,7 +9,8 @@
         [timeEnum['short-break'], '#F26592'],
         [timeEnum['long-break'], '#E2346B']
     ]);
-    var mode = timeEnum.work, paused = true;
+    var mode = timeEnum.work
+    var paused = true;
     var timeLeftS = mode * 60, leftoverMs = 0;
     var start = Date.now();
     var fullTimer = null, partTimer = null;
