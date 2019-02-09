@@ -25,24 +25,18 @@ const minutes = document.querySelector('#minutes');
 const seconds = document.querySelector('#seconds');
 const pauseButton = document.querySelector('#pause');
 const resetButton = document.querySelector('#reset');
+const modeButtons = document.querySelectorAll('#mode-buttons > button');
 const workButton = document.querySelector(`#${WORK}`);
 const shortBreakButton = document.querySelector(`#${SHORT_BREAK}`);
 const longBreakButton = document.querySelector(`#${LONG_BREAK}`);
 
 pauseButton.addEventListener('click', handlePause);
 resetButton.addEventListener('click', resetTimer);
-workButton.addEventListener('click', () => {
-    mode = WORK;
-    setMode();
-});
-shortBreakButton.addEventListener('click', () => {
-    mode = SHORT_BREAK;
-    setMode();
-});
-longBreakButton.addEventListener('click', () => {
-    mode = LONG_BREAK;
-    setMode();
-});
+// listener order matters (mode must be set before corresponding time is set)
+workButton.addEventListener('click', () => mode = WORK);
+shortBreakButton.addEventListener('click', () => mode = SHORT_BREAK);
+longBreakButton.addEventListener('click', () => mode = LONG_BREAK);
+modeButtons.forEach(button => button.addEventListener('click', () => setMode()));
 buttons.forEach(button => {
     button.addEventListener('click', addClickedClassButton);
     button.addEventListener('transitionend', removeClickedClassButton);
