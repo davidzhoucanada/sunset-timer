@@ -1,17 +1,20 @@
 (function () {
-    const timeEnum = Object.freeze({
-        'work': 25,
-        'short-break': 5,
-        'long-break': 15
-    });
-    var modeColourMap = new Map([
-        [timeEnum['work'], '#FF7E30'],
-        [timeEnum['short-break'], '#F26592'],
-        [timeEnum['long-break'], '#E2346B']
+    const WORK = 'work';
+    const SHORT_BREAK = 'short-break';
+    const LONG_BREAK = 'long-break';
+    const timeMap = new Map([
+        [WORK, 25],
+        [SHORT_BREAK, 5],
+        [LONG_BREAK, 15]
     ]);
-    var mode = timeEnum.work
+    const modeColourMap = new Map([
+        [WORK, '#FF7E30'],
+        [SHORT_BREAK, '#F26592'],
+        [LONG_BREAK, '#E2346B']
+    ]);
+    var mode = WORK;
     var paused = true;
-    var timeLeftS = mode * 60, leftoverMs = 0;
+    var timeLeftS = timeMap.get(mode) * 60, leftoverMs = 0;
     var start = Date.now();
     var fullTimer = null, partTimer = null;
 
@@ -20,22 +23,22 @@
     const seconds = document.querySelector('#seconds');
     const pauseButton = document.querySelector('#pause');
     const resetButton = document.querySelector('#reset');
-    const workButton = document.querySelector('#work');
-    const shortBreakButton = document.querySelector('#short-break');
-    const longBreakButton = document.querySelector('#long-break');
+    const workButton = document.querySelector(`#${WORK}`);
+    const shortBreakButton = document.querySelector(`#${SHORT_BREAK}`);
+    const longBreakButton = document.querySelector(`#${LONG_BREAK}`);
 
     pauseButton.addEventListener('click', handlePause);
     resetButton.addEventListener('click', resetTimer);
     workButton.addEventListener('click', () => {
-        mode = timeEnum['work'];
+        mode = WORK;
         setMode();
     });
     shortBreakButton.addEventListener('click', () => {
-        mode = timeEnum['short-break'];
+        mode = SHORT_BREAK;
         setMode();
     });
     longBreakButton.addEventListener('click', () => {
-        mode = timeEnum['long-break'];
+        mode = LONG_BREAK;
         setMode();
     });
     buttons.forEach(button => {
@@ -92,13 +95,13 @@
     }
 
     function resetTimer() {
-        if (fullTimer !== null || partTimer !== null || timeLeftS !== mode * 60 || leftoverMs !== 0) {
+        if (fullTimer !== null || partTimer !== null || timeLeftS !== timeMap.get(mode) * 60 || leftoverMs !== 0) {
             clearTimers();
             leftoverMs = 0;
-            timeLeftS = mode * 60;
+            timeLeftS = timeMap.get(mode) * 60;
             paused = false;
             setPauseButton();
-            setTime(mode * 60);
+            setTime(timeMap.get(mode) * 60);
             startTimer();
         }
     }
@@ -151,6 +154,6 @@
     }
 
     // sets time in HTML upon page load
-    setTime(mode * 60);
+    setTime(timeMap.get(mode) * 60);
     startTimer();
 })();
