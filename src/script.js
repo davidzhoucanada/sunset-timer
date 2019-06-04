@@ -88,7 +88,7 @@ function normalTick() {
 
 function startCustom(minutes, seconds = 0) {
     mode = CUSTOM;
-    timeMap.set(CUSTOM, minutes + seconds / 60);
+    timeMap.set(CUSTOM, minutes + Math.floor(seconds / 60));
     setMode();
 }
 
