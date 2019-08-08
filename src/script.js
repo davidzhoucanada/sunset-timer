@@ -21,8 +21,8 @@ var start;
 var fullTimer = null, partTimer = null;
 
 const buttons = document.querySelectorAll('button');
-const minutes = document.querySelector('#minutes');
-const seconds = document.querySelector('#seconds');
+const minutesElement = document.querySelector('#minutes');
+const secondsElement = document.querySelector('#seconds');
 const pauseButton = document.querySelector('#pause');
 const resetButton = document.querySelector('#reset');
 const modeButtons = document.querySelectorAll('#mode-buttons > button');
@@ -118,10 +118,13 @@ function setPauseButton(paused) {
 }
 
 function setTime(secondsLeft) {
-    minutes.textContent = Math.floor(secondsLeft / 60) <= 9 ?
+    const minutes = Math.floor(secondsLeft / 60) <= 9 ?
         '0' + Math.floor(secondsLeft / 60) : Math.floor(secondsLeft / 60);
-    seconds.textContent = secondsLeft % 60 <= 9 ?
+    const seconds = secondsLeft % 60 <= 9 ?
         '0' + (secondsLeft % 60) : (secondsLeft % 60);
+    minutesElement.textContent = minutes;
+    secondsElement.textContent = seconds;
+    document.title = `${minutes}:${seconds} - Sunset Timer`;
 }
 
 function startTimer() {
