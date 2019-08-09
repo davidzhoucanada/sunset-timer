@@ -3,9 +3,9 @@ const SHORT_BREAK = 'short-break';
 const LONG_BREAK = 'long-break';
 const CUSTOM = 'custom';
 const timeMap = new Map([
-    [WORK, 25],
-    [SHORT_BREAK, 5],
-    [LONG_BREAK, 15],
+    [WORK, 25 * 60],
+    [SHORT_BREAK, 5 * 60],
+    [LONG_BREAK, 15 * 60],
     [CUSTOM, -1]
 ]);
 const modeColourMap = new Map([
@@ -88,7 +88,7 @@ function normalTick() {
 
 function startCustom(minutes, seconds = 0) {
     mode = CUSTOM;
-    timeMap.set(CUSTOM, minutes + Math.floor(seconds / 60));
+    timeMap.set(CUSTOM, minutes * 60 + Math.floor(seconds));
     setMode();
 }
 
@@ -97,13 +97,13 @@ function removeClickedClassButton() {
 }
 
 function resetTimer() {
-    if (fullTimer !== null || partTimer !== null || timeLeftS !== timeMap.get(mode) * 60 || leftoverMs !== 0) {
+    if (fullTimer !== null || partTimer !== null || timeLeftS !== timeMap.get(mode) || leftoverMs !== 0) {
         clearTimers();
         leftoverMs = 0;
-        timeLeftS = timeMap.get(mode) * 60;
+        timeLeftS = timeMap.get(mode);
         paused = false;
         setPauseButton();
-        setTime(timeMap.get(mode) * 60);
+        setTime(timeMap.get(mode));
         startTimer();
     }
 }
