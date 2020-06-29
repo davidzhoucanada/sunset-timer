@@ -14,11 +14,11 @@ const modeColourMap = new Map([
     [LONG_BREAK, '#E2346B'],
     [CUSTOM, '#BE6BFF']
 ]);
-var mode = WORK;
-var paused;
-var timeLeftS, leftoverMs;
-var start;
-var fullTimer = null, partTimer = null;
+let mode = WORK;
+let paused;
+let timeLeftS, leftoverMs;
+let start;
+let fullTimer = null, partTimer = null;
 
 const buttons = document.querySelectorAll('button');
 const minutesElement = document.querySelector('#minutes');
@@ -32,19 +32,15 @@ const longBreakButton = document.querySelector(`#${LONG_BREAK}`);
 
 pauseButton.addEventListener('click', handlePause);
 resetButton.addEventListener('click', resetTimer);
-// listener order matters (mode must be set before corresponding time is set)
+// listener order matters (mode var must be set before corresponding time is set)
 workButton.addEventListener('click', () => mode = WORK);
 shortBreakButton.addEventListener('click', () => mode = SHORT_BREAK);
 longBreakButton.addEventListener('click', () => mode = LONG_BREAK);
 modeButtons.forEach(button => button.addEventListener('click', () => setMode()));
 buttons.forEach(button => {
-    button.addEventListener('click', addClickedClassButton);
-    button.addEventListener('transitionend', removeClickedClassButton);
+    button.addEventListener('click', () => this.classList.add('clicked'));
+    button.addEventListener('transitionend', () => this.classList.remove('clicked'));
 });
-
-function addClickedClassButton() {
-    this.classList.add('clicked');
-}
 
 function clearTimers() {
     clearInterval(fullTimer);
@@ -56,13 +52,13 @@ function clearTimers() {
 function handlePause() {
     if (paused) {
         startTimer();
-        setPauseButton(paused);
+        setPauseButton();
         return;
     }
 
     if (fullTimer !== null || partTimer !== null) {
         paused = true;
-        setPauseButton(paused);
+        setPauseButton();
         if (partTimer !== null) {
             // calculates partial second of partial second (caused by unpausing and pausing again rapidly)
             leftoverMs = Math.max(0, leftoverMs - (Date.now() - start));
@@ -77,7 +73,7 @@ function handlePause() {
 function normalTick() {
     start = Date.now();
     fullTimer = setInterval(() => {
-        timeLeftS--;
+        --timeLeftS;
         setTime(timeLeftS);
         if (timeLeftS === 0) {
             timeOut();
@@ -90,10 +86,6 @@ function startCustom(minutes, seconds = 0) {
     mode = CUSTOM;
     timeMap.set(CUSTOM, minutes * 60 + Math.floor(seconds));
     setMode();
-}
-
-function removeClickedClassButton() {
-    this.classList.remove('clicked');
 }
 
 function resetTimer() {
@@ -113,7 +105,7 @@ function setMode() {
     resetTimer();
 }
 
-function setPauseButton(paused) {
+function setPauseButton() {
     pauseButton.textContent = paused ? 'unpause' : 'pause';
 }
 
@@ -133,7 +125,7 @@ function startTimer() {
         start = Date.now();
         // runs a partial second
         partTimer = setTimeout(() => {
-            timeLeftS--;
+            --timeLeftS;
             setTime(timeLeftS);
             leftoverMs = 0;
             partTimer = null;
@@ -152,10 +144,7 @@ function timeOut() {
     fullTimer = null;
     leftoverMs = 0;
     // gives time for setTime to run
-    setTimeout(() => {
-        var audio = new Audio('../audio/shallow.mp3');
-        audio.play();
-    }, 1);
+    setTimeout(() => (new Audio('../audio/shallow.mp3')).play(), 1);
 }
 
 // starts timer upon page load
