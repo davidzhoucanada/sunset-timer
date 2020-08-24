@@ -38,8 +38,8 @@ shortBreakButton.addEventListener('click', () => mode = SHORT_BREAK);
 longBreakButton.addEventListener('click', () => mode = LONG_BREAK);
 modeButtons.forEach(button => button.addEventListener('click', () => setMode()));
 buttons.forEach(button => {
-    button.addEventListener('click', () => this.classList.add('clicked'));
-    button.addEventListener('transitionend', () => this.classList.remove('clicked'));
+    button.addEventListener('click', () => button.classList.add('clicked'));
+    button.addEventListener('transitionend', () => button.classList.remove('clicked'));
 });
 
 function clearTimers() {
