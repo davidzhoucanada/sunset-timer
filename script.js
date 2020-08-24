@@ -30,6 +30,8 @@ const workButton = document.querySelector(`#${WORK}`);
 const shortBreakButton = document.querySelector(`#${SHORT_BREAK}`);
 const longBreakButton = document.querySelector(`#${LONG_BREAK}`);
 
+const audio = new Audio('./audio/shallow.mp3');
+
 pauseButton.addEventListener('click', handlePause);
 resetButton.addEventListener('click', resetTimer);
 // listener order matters (mode var must be set before corresponding time is set)
@@ -144,7 +146,7 @@ function timeOut() {
     fullTimer = null;
     leftoverMs = 0;
     // gives time for setTime to run
-    setTimeout(() => (new Audio('./audio/shallow.mp3')).play(), 1);
+    setTimeout(() => audio.play(), 1);
 }
 
 // starts timer upon page load
