@@ -144,7 +144,7 @@ function timeOut() {
     fullTimer = null;
     leftoverMs = 0;
     // gives time for setTime to run
-    setTimeout(() => (new Audio('../audio/shallow.mp3')).play(), 1);
+    setTimeout(() => (new Audio('./audio/shallow.mp3')).play(), 1);
 }
 
 // starts timer upon page load
