@@ -4,29 +4,33 @@
 
 <head>
   <meta charset='UTF-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sunset Timer</title>
   <link rel='stylesheet' href='./style.css'>
   <link rel='icon' type='image/png' href='./favicon.png'>
 </head>
 
 <body>
-  <div id='top-wrapper'>
-    <div id='timer'>
-      <h1 id='time'>
-        <span id='minutes'></span> :
-        <span id='seconds'></span>
-      </h1>
+  <div id='wrapper'>
+    <div id='top-spacer'>
     </div>
-  </div>
-  <div id='timer-buttons'>
-    <button id='pause'>pause</button>
-    <button id='reset'>reset</button>
-  </div>
-  <div id='bottom-wrapper'>
-    <div id='mode-buttons'>
-      <button id='work'>work</button>
-      <button id='short-break'>short break</button>
-      <button id='long-break'>long break</button>
+    <div id='timer-container'>
+      <h1 id='time-wrapper'>
+        <div class='span-wrapper'><span id='minutes'></span></div>
+        <span>:</span>
+        <div class='span-wrapper'><span id='seconds'></span></div>
+      </h1>
+      <div id='timer-buttons-container'>
+        <button id='pause'>pause</button>
+        <button id='reset'>reset</button>
+      </div>
+    </div>
+    <div id='mode-buttons-container'>
+      <div id='mode-buttons'>
+        <button id='work'>work</button>
+        <button id='short-break'>short break</button>
+        <button id='long-break'>long break</button>
+      </div>
     </div>
   </div>
 
