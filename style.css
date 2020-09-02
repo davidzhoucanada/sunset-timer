@@ -85,17 +85,21 @@ button {
 }
 
 #timer-buttons-container>button {
-  margin-left : 1rem;
-  margin-right: 1rem;
+  margin-left : 1.5rem;
+  margin-right: 1.5rem;
 }
 
 #pause,
 #reset {
-  flex: 0 0 4.5rem;
+  flex-basis: 7rem;
 }
 
 #pause {
   text-align: right;
+}
+
+#reset {
+  text-align: left;
 }
 
 button:hover {
