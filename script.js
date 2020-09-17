@@ -86,7 +86,7 @@ function normalTick() {
 
 function startCustom(minutes, seconds = 0) {
     mode = CUSTOM;
-    timeMap.set(CUSTOM, minutes * 60 + Math.floor(seconds));
+    timeMap.set(CUSTOM, Math.floor(minutes * 60) + Math.floor(seconds));
     setMode();
 }
 
@@ -112,8 +112,7 @@ function setPauseButton() {
 }
 
 function setTime(secondsLeft) {
-    const minutes = Math.floor(secondsLeft / 60) <= 9 ?
-        '0' + Math.floor(secondsLeft / 60) : Math.floor(secondsLeft / 60);
+    const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60 <= 9 ?
         '0' + (secondsLeft % 60) : (secondsLeft % 60);
     minutesElement.textContent = minutes;
